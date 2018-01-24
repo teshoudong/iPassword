@@ -2,6 +2,7 @@
     background-color: #1A1919;
     height: 100%;
     position: relative;
+    -webkit-app-region: drag;
 
     .menu-logo {
         text-align: center;
@@ -11,6 +12,8 @@
     }
 
     .menu-list {
+        -webkit-app-region: no-drag;
+
         .menu-item {
             height: 40px;
             line-height: 40px;
@@ -32,12 +35,14 @@
         left: 0;
         width: 100%;
         padding: 10px;
+        box-sizing: border-box;
 
         .menu-setting {
             width: 20px;
             height: 20px;
             background: url(./assets/setting.svg) no-repeat center center;
             background-size: cover;
+            -webkit-app-region: no-drag;
             cursor: pointer;
         }
     }
