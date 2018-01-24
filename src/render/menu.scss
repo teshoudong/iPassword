@@ -1,0 +1,44 @@
+.pw-menu {
+    background-color: #1A1919;
+    height: 100%;
+    position: relative;
+
+    .menu-logo {
+        text-align: center;
+        color: #A2A2A2;
+        font-size: 20px;
+        padding: 60px 0 30px 0;
+    }
+
+    .menu-list {
+        .menu-item {
+            height: 40px;
+            line-height: 40px;
+            color: #A2A2A2;
+            font-size: 12px;
+            padding-left: 20px;
+            cursor: pointer;
+    
+            &.active {
+                background-color: #DA3610;
+                color: #FFF;
+            }
+        }
+    }
+
+    .menu-button {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+
+        .menu-setting {
+            width: 20px;
+            height: 20px;
+            background: url(./assets/setting.svg) no-repeat center center;
+            background-size: cover;
+            cursor: pointer;
+        }
+    }
+}

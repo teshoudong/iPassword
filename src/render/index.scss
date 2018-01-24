@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#app {
+    height: 100%;
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    .container-menu {
+        width: 200px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        -webkit-app-region: drag;
+    }
+
+    .container-page {
+        flex-grow: 1;
+        flex-shrink: 1;
+        background-color: #FFF;
+    }
+}

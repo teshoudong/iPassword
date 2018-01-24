@@ -1,0 +1,169 @@
+.pw-all {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    .pw-list {
+        flex-grow: 1;
+        flex-shrink: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    
+        .list-header {
+            flex-grow: 0;
+            flex-shrink: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            border-bottom: 1px solid #D3D3D3;
+    
+            .search {
+                flex-shrink: 1;
+                flex-grow: 1;
+                position: relative;
+    
+                &::before {
+                    content: ' ';
+                    width: 15px;
+                    height: 15px;
+                    background: url(./assets/search.svg) no-repeat center center;
+                    background-size: cover;
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 10px;
+                    margin: auto 0;
+                }
+    
+                input {
+                    width: 100%;
+                    border-radius: 6px;
+                    height: 30px;
+                    outline: 0;
+                    border: 1px solid #D3D3D3;
+                    padding: 0 10px 0 30px;
+                    color: #333;
+                    box-sizing: border-box;
+                }
+            }
+    
+            .add {
+                width: 30px;
+                height: 30px;
+                background: url(./assets/add.svg) no-repeat center center;
+                background-size: 15px;
+                cursor: pointer;
+                margin-left: 10px;
+            }
+        }
+    
+        .list-content {
+            flex-grow: 1;
+            flex-shrink: 1;
+            overflow-x: hidden;
+            overflow-y: scroll;
+    
+            .list-group {
+    
+                & + .list-group {
+                    border-top: 1px solid #D3D3D3;
+                }
+                
+                .list-title {
+                    font-size: 14px;
+                    color: #1A1919;
+                    padding: 5px 10px;
+                    border-bottom: 1px solid #D3D3D3;
+                }
+    
+                .list-item {
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: row;
+                    padding: 10px;
+    
+                    .img {
+                        width: 50px;
+                        height: 50px;
+                        flex-shrink: 0;
+                        flex-grow: 0;
+                        background-color: #D3D3D3;
+                        border-radius: 5px;
+                        overflow: hidden;
+                    }
+    
+                    .content {
+                        flex-shrink: 1;
+                        flex-grow: 1;
+                        margin-left: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+    
+                        .title {
+                            font-size: 14px;
+                            color: #666564;
+                        }
+    
+                        .subtitle {
+                            font-size: 12px;
+                            color: #A2A2A2;
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+
+    .pw-detail {
+        flex-grow: 0;
+        flex-shrink: 0;
+        width: 400px;
+        border-left: 1px solid #D3D3D3;
+
+        .detail-img {
+            width: 100px;
+            height: 100px;
+            background-color: #D3D3D3;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 40px auto 10px auto;
+        }
+    
+        .detail-title {
+            font-size: 16px;
+            text-align: center;
+            color: #1A1919;
+            margin-bottom: 40px;
+        }
+    
+        .detail-list {
+            .item {
+                display: flex;
+                flex-direction: row;
+                padding: 10px;
+                line-height: 20px;
+    
+                .title {
+                    width: 150px;
+                    flex-shrink: 0;
+                    flex-grow: 0;
+                    font-size: 12px;
+                    color: #A2A2A2;
+                    text-align: right;
+                    margin-right: 10px;
+                }
+    
+                .content {
+                    flex-shrink: 0;
+                    flex-grow: 0;
+                    font-size: 12px;
+                    color: #A2A2A2;
+                }
+            }
+        }
+    }
+}
+
