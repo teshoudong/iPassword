@@ -1,0 +1,88 @@
+.pw-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    .modal-container {
+        width: 400px;
+        background-color: #FFF;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+        border-radius: 4px;
+
+        .modal-header {
+            height: 48px;
+            position: relative;
+
+            .modal-title {
+                font-size: 14px;
+                color: #333;
+                line-height: 48px;
+                text-indent: 15px;
+            }
+
+            .modal-close {
+                width: 48px;
+                height: 48px;
+                background: url(./assets/close.svg) no-repeat center center;
+                background-size: 15px;
+                position: absolute;
+                right: 0;
+                top: 0;
+                cursor: pointer;
+            }
+        }
+
+        .modal-content {
+            min-height: 100px;
+        }
+
+        .modal-footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            padding: 10px;
+
+            .modal-ok {
+                border: 0;
+                outline: 0;
+                height: 30px;
+                padding: 0 20px;
+                background-color: #DA3610;
+                color: #FFF;
+                border-radius: 4px;
+                margin-left: 10px;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+                &:hover {
+                    background-color: #F14118;
+                }
+            }
+
+            .modal-cancel {
+                border: 0;
+                outline: 0;
+                height: 30px;
+                padding: 0 20px;
+                background-color: #FFF;
+                border: 1px solid #D3D3D3;
+                color: #333;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+                &:hover {
+                    border-color: #DA3610;
+                    color: #DA3610;
+                }
+            }
+        }
+    }
+}
