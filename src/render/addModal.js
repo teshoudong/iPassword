@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import './addModal.scss';
 import Modal from './modal';
 import storage from './storage';
+import encrypt from './encrypt';
 
 class AddModal extends React.Component {
     constructor(props) {
@@ -21,14 +22,18 @@ class AddModal extends React.Component {
         const website = elements.website.value || '';
 
         if (account && name && password) {
+            const keyPassword = storage.getSessionPassword();
+            const encryptPassword = encrypt.encrypt(password, keyPassword);
             storage.savePassword({
                 account,
                 name,
-                password,
+                encryptPassword,
                 website
             });
             this.hide();
             this.props.onOk();
+        } else {
+            alert('漏填了');
         }
     }
 

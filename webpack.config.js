@@ -29,7 +29,7 @@ module.exports = {
                 loader: 'svg-url-loader'
             }
         ],
-        noParse: [/\bagent\b/]
+        noParse: [/\bagent\b/, /\bencrypt\b/]
     },
     plugins: [
         // new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}})

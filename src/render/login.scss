@@ -1,0 +1,53 @@
+.pw-login {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #2F302E;
+
+    .login-container {
+        .login-title {
+            text-align: center;
+            color: #191A19;
+            font-size: 50px;
+            margin-bottom: 30px;
+        }
+
+        .login-form {
+            .login-input {
+                input {
+                    border: 0;
+                    outline: 0;
+                    width: 100%;
+                    height: 40px;
+                    background-color: transparent;
+                    color: #D3D3D3;
+                    font-size: 12px;
+                    text-align: center;
+                    background-color: #FFF;
+                    border-radius: 4px;
+
+                    & + input {
+                        margin-top: 10px;
+                    }
+                }
+            }
+
+            .login-button {
+                width: 100%;
+                border: 0;
+                outline: 0;
+                height: 40px;
+                line-height: 40px;
+                background-color: #DA3610;
+                color: #FFF;
+                font-size: 12px;
+                padding-left: 20px;
+                cursor: pointer;
+                border-radius: 4px;
+                margin-top: 20px;
+            }
+        }
+    }
+}

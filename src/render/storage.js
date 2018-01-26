@@ -14,5 +14,21 @@ export default {
     getPasswordList() {
         let passwordListStr = localStorage.getItem('passwordList');
         return passwordListStr ? JSON.parse(passwordListStr) : [];
+    },
+
+    saveKeyPassword(password) {
+        localStorage.setItem('keypassword', password);
+    },
+
+    getKeyPassword() {
+        return localStorage.getItem('keypassword') || '';
+    },
+
+    saveSessionPassword(password) {
+        return sessionStorage.setItem('keypassword', password);
+    },
+
+    getSessionPassword() {
+        return sessionStorage.getItem('keypassword') || '';
     }
 };

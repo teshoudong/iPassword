@@ -5,7 +5,8 @@ import storage from './storage';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-// import agent from './agent';
+import agent from './agent';
+import encrypt from './encrypt';
 
 class List extends React.Component {
     constructor(props) {
@@ -101,7 +102,7 @@ class Detail extends React.Component {
 
     handleUrl(e, url) {
         e.preventDefault();
-        // agent.openUrl(url);
+        agent.openUrl(url);
     }
 
     handlePassword() {
@@ -174,6 +175,8 @@ class All extends React.Component {
     }
 
     handleSelectPassword(password) {
+        const keyPassword = storage.getSessionPassword();
+        password.password = encrypt.decipher(password.encryptPassword, keyPassword);
         this.setState({
             selectedPassword: password
         });
