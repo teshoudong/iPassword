@@ -8,7 +8,6 @@ class Menu extends React.Component {
                 <div className="menu-logo">iPassword</div>
                 <div className="menu-list">
                     <div className="menu-item active">所有项目</div>
-                    <div className="menu-item">类别</div>
                 </div>
                 <div className="menu-button">
                     <div className="menu-setting"></div>

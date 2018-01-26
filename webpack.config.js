@@ -28,9 +28,11 @@ module.exports = {
                 exclude: /node_modules/,
                 loader: 'svg-url-loader'
             }
-        ]
+        ],
+        noParse: [/\bagent\b/]
     },
     plugins: [
         // new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}})
+        new webpack.IgnorePlugin(new RegExp('^(electron|fs|path)$'))
     ]
 };

@@ -11,12 +11,37 @@
                 color: #333;
                 width: 70px;
                 line-height: 40px;
+
+                &.required::after {
+                    content: '*';
+                    color: #DA3610;
+                    font-size: 12px;
+                }
             }
 
             .content {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
+                position: relative;
+
+                .showPassword {
+                    height: 30px;
+                    width: 30px;
+                    background: url(./assets/hidePassword.svg) no-repeat center center;
+                    background-size: 20px;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    margin: auto 0;
+                    cursor: pointer;
+
+                    &.active {
+                        background: url(./assets/showPassword.svg) no-repeat center center;
+                        background-size: 20px;
+                    }
+                }
 
                 input {
                     width: 200px;
@@ -28,6 +53,10 @@
                     box-sizing: border-box;
                     padding: 0 10px;
                     color: #333;
+
+                    &.password {
+                        padding: 0 30px 0 10px;
+                    }
 
                     &:hover {
                         border-color: #49a9ee;

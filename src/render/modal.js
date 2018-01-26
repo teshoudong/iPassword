@@ -6,44 +6,45 @@ class Modal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: this.props.visible
+            visible: false
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            visible: nextProps.visible
-        });
-    }
-
-    handleClose() {
+    hide() {
         this.setState({
             visible: false
         });
     }
+
+    show() {
+        this.setState({
+            visible: true
+        });
+    }
+    
 
     handleOk() {
         this.props.onOk();
     }
 
     handleCancel() {
-        this.handleClose();
+        this.hide();
         this.props.onCancel();
     }
 
     render() {
         if (this.state.visible) {
             return (
-                <div className="pw-modal">
-                    <div className="modal-container">
+                <div className="pw-modal" onClick={() => this.hide()}>
+                    <div className="modal-container" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
                             {this.props.title && <p className="modal-title">{this.props.title}</p>}
-                            <div className="modal-close" onClick={() => this.handleClose()}></div>
+                            <div className="modal-close" onClick={() => this.hide()}></div>
                         </div>
                         <div className="modal-content">{this.props.children}</div>
                         <div className="modal-footer">
-                            <button className="modal-cancel" onClick={() => this.handleCancel()}>取消</button>
-                            <button className="modal-ok" onClick={() => this.handleOk()}>确定</button>
+                            <button type="button" className="modal-cancel" onClick={() => this.handleCancel()}>取消</button>
+                            <button type="button" className="modal-ok" onClick={() => this.handleOk()}>确定</button>
                         </div>
                     </div>
                 </div>
@@ -56,13 +57,11 @@ class Modal extends React.Component {
 }
 
 Modal.defaultProps = {
-    visible: false,
     onOk: () => {},
     onCancel: () => {}
 };
 
 Modal.propTypes = {
-    visible: PropTypes.bool,
     title: PropTypes.string,
     onOk: PropTypes.func,
     onCancel: PropTypes.func
