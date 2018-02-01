@@ -7,6 +7,7 @@ import moment from 'moment';
 import classNames from 'classnames';
 import agent from './agent';
 import encrypt from './encrypt';
+import fuzzy from 'fuzzy';
 
 class List extends React.Component {
     constructor(props) {
@@ -21,8 +22,8 @@ class List extends React.Component {
         this.getPasswordMap();
     }
 
-    getPasswordMap() {
-        const passwordList = storage.getPasswordList();
+    getPasswordMap(passwordList) {
+        passwordList = passwordList || storage.getPasswordList();
         let map = {};
         passwordList.forEach(item => {
             const prefix = item.name.substr(0, 1).toUpperCase();
@@ -41,6 +42,15 @@ class List extends React.Component {
 
     handleSelect(item) {
         this.props.onSelect(item);
+    }
+
+    handleSearch(e) {
+        const content = e.target.value;
+        const passwordList = storage.getPasswordList();
+        const result = fuzzy.filter(content, passwordList, {
+            extract: el => `${el.account} ${el.name} ${el.website}`
+        }).map(item => item.original);
+        this.getPasswordMap(result);
     }
 
     renderList() {
@@ -71,7 +81,7 @@ class List extends React.Component {
             <div className="pw-list">
                 <div className="list-header">
                     <div className="search">
-                        <input type="text" placeholder="搜索所有项目"/>
+                        <input type="text" placeholder="搜索所有项目" onInput={e => this.handleSearch(e)}/>
                     </div>
                     <div className="add" onClick={() => this.handleAdd()}></div>
                 </div>

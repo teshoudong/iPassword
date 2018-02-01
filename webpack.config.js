@@ -32,7 +32,7 @@ module.exports = {
         noParse: [/\bagent\b/, /\bencrypt\b/]
     },
     plugins: [
-        // new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}})
+        new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}}),
         new webpack.IgnorePlugin(new RegExp('^(electron|fs|path)$'))
     ]
 };
