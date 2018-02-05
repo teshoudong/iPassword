@@ -1,6 +1,8 @@
-var webpack = require('webpack');
+const webpack = require('webpack');
 
 module.exports = {
+    watch: true,
+    target: 'electron',
     entry: {
         main: './src/render/index.js'
     },
@@ -31,6 +33,7 @@ module.exports = {
         ],
         noParse: [/\bagent\b/, /\bencrypt\b/]
     },
+    target: 'electron',
     plugins: [
         new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}}),
         new webpack.IgnorePlugin(new RegExp('^(electron|fs|path)$'))
