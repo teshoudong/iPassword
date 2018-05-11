@@ -74,6 +74,7 @@
                     position: sticky;
                     left: 0;
                     top: 0;
+                    z-index: 1;
                     background-color: #FFF;
                     font-size: 14px;
                     color: #1A1919;
@@ -243,6 +244,9 @@
                     }
 
                     a {
+                        display: block;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
                         color: #49a9ee;
                         cursor: pointer;
                     }

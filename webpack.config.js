@@ -1,13 +1,12 @@
 const webpack = require('webpack');
 
 module.exports = {
-    watch: true,
     target: 'electron',
     entry: {
-        main: './src/render/index.js'
+        main: './src/index.js'
     },
     output: {
-        filename: './src/render/build.js'
+        filename: './build/build.js'
     },
     module: {
         loaders: [
@@ -33,9 +32,8 @@ module.exports = {
         ],
         noParse: [/\bagent\b/, /\bencrypt\b/]
     },
-    target: 'electron',
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}}),
+        // new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}}),
         new webpack.IgnorePlugin(new RegExp('^(electron|fs|path)$'))
     ]
 };

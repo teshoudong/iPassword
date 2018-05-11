@@ -1,6 +1,6 @@
 import React from 'react';
 import './all.scss';
-import AddModal from './addModal';
+import PasswordModal from './passwordModal';
 import storage from './storage';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -13,7 +13,6 @@ class List extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showAdd: false,
             passwordMap: {}
         };
     }
@@ -53,6 +52,24 @@ class List extends React.Component {
         this.getPasswordMap(result);
     }
 
+    handleMenu(item, key) {
+        agent.showMenu([
+            {
+                label: '编辑',
+                click: () => {
+                    this.editModal.show(item);
+                }
+            },
+            {
+                label: '删除',
+                click: () => {
+                    const list = storage.delPassword(item);
+                    this.getPasswordMap(list);
+                }
+            }
+        ]);
+    }
+
     renderList() {
         const map = this.state.passwordMap;
         return Object.keys(map).map(key => (
@@ -60,7 +77,7 @@ class List extends React.Component {
                 <h1 className="list-title">{key}</h1>
                 {
                     map[key].map(item => (
-                        <div className="list-item" key={item.id} onClick={() => this.handleSelect(item)}>
+                        <div className="list-item" key={item.id} onContextMenu={() => this.handleMenu(item, key)} onClick={() => this.handleSelect(item)}>
                             <div className="img">
                                 {item.img && <img src={item.img}/>}
                             </div>
@@ -76,7 +93,6 @@ class List extends React.Component {
     }
 
     render() {
-        const { showAdd } = this.state;
         return (
             <div className="pw-list">
                 <div className="list-header">
@@ -88,7 +104,8 @@ class List extends React.Component {
                 <div className="list-content">
                     {this.renderList()}
                 </div>
-                <AddModal ref={modal => this.addModal = modal} visible={showAdd} onOk={() => this.getPasswordMap()}/>
+                <PasswordModal ref={modal => this.addModal = modal} title="添加密码" onOk={() => this.getPasswordMap()}/>
+                <PasswordModal ref={modal => this.editModal = modal} title="编辑密码" onOk={() => this.getPasswordMap()}/>
             </div>
         );
     }

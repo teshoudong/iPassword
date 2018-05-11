@@ -1,12 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import './addModal.scss';
+import './passwordModal.scss';
 import Modal from './modal';
 import storage from './storage';
 import encrypt from './encrypt';
 
-class AddModal extends React.Component {
+class PasswordModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,12 +24,22 @@ class AddModal extends React.Component {
         if (account && name && password) {
             const keyPassword = storage.getSessionPassword();
             const encryptPassword = encrypt.encrypt(password, keyPassword);
-            storage.savePassword({
-                account,
-                name,
-                encryptPassword,
-                website
-            });
+            if (this.item) {
+                storage.updatePassword({
+                    id: this.item.id,
+                    account,
+                    name,
+                    encryptPassword,
+                    website
+                });
+            } else {
+                storage.savePassword({
+                    account,
+                    name,
+                    encryptPassword,
+                    website
+                });
+            }
             this.hide();
             this.props.onOk();
         } else {
@@ -37,8 +47,19 @@ class AddModal extends React.Component {
         }
     }
 
-    show() {
+    show(item) {
         this.modal.show();
+        if (item) {
+            const keyPassword = storage.getSessionPassword();
+            item.password = encrypt.decipher(item.encryptPassword, keyPassword);
+            this.item = item;
+            Object.keys(item).forEach(key => {
+                const formItem = this.form.elements[key];
+                if (formItem) {
+                    formItem.value = item[key];
+                }
+            });
+        }
     }
 
     hide() {
@@ -54,11 +75,12 @@ class AddModal extends React.Component {
     render() {
 
         const { showPassword } = this.state;
+        const { title } = this.props;
         
         return (
-            <Modal ref={modal => this.modal = modal} title="添加密码" onOk={() => this.handleSubmit()} onCancel={() => this.props.onCancel()}>
-                <div className="pw-addModal">
-                    <form className="addModal-form" ref={form => this.form = form} onSubmit={() => this.handleSubmit()}>
+            <Modal ref={modal => this.modal = modal} title={title} onOk={() => this.handleSubmit()} onCancel={() => this.props.onCancel()}>
+                <div className="pw-passwordModal">
+                    <form className="passwordModal-form" ref={form => this.form = form} onSubmit={() => this.handleSubmit()}>
                         <div className="item">
                             <p className="title required">名称</p>
                             <div className="content">
@@ -91,14 +113,14 @@ class AddModal extends React.Component {
     }
 }
 
-AddModal.defaultProps = {
+PasswordModal.defaultProps = {
     onOk: () => {},
     onCancel: () => {}
 };
 
-AddModal.propTypes = {
+PasswordModal.propTypes = {
     onOk: PropTypes.func,
     onCancel: PropTypes.func
 };
 
-export default AddModal;
+export default PasswordModal;
