@@ -5,7 +5,8 @@
   "main": "./main.js",
   "scripts": {
     "dev": "concurrently \"webpack --watch\" \"electron ./main.js\"",
-    "build": "webpack"
+    "build": "webpack",
+    "pack": "electron-packager . iPassword --overwrite=true --ignore=\"node_modules|src|webpack.config.js|.git|.gitignore|logo.sketch|logo.png\""
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "concurrently": "^3.5.1",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.8",
+    "electron-packager": "^12.0.2",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
