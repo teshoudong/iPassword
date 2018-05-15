@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"webpack --watch\" \"electron ./main.js\"",
     "build": "webpack",
-    "pack": "electron-packager . iPassword --overwrite=true --ignore=\"node_modules|src|webpack.config.js|.git|.gitignore|logo.sketch|logo.png\""
+    "pack": "electron-packager . iPassword --overwrite=true --icon=logo.icns --ignore=\"node_modules|src|webpack.config.js|.git|.gitignore|logo.sketch|logo.icns\""
   },
   "repository": {
     "type": "git",
