@@ -40480,6 +40480,9 @@ var List = function (_React$Component) {
                     var list = _storage2.default.delPassword(item);
                     _this2.getPasswordMap(list);
                 }
+            }, {
+                label: 'Edit',
+                submenu: [{ role: 'undo' }, { role: 'redo' }, { type: 'separator' }, { role: 'cut' }, { role: 'copy' }, { role: 'paste' }, { role: 'pasteandmatchstyle' }, { role: 'delete' }, { role: 'selectall' }]
             }]);
         }
     }, {

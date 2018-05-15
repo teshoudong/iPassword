@@ -7,6 +7,8 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 
+const menu = require('./menu');
+
 // require('electron-reload')(path.join(__dirname, './build/'))
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -28,6 +30,9 @@ function createWindow () {
     protocol: 'file:',
     slashes: true
   }))
+
+  // init menu
+  menu.init();
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
