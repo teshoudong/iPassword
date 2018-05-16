@@ -5,6 +5,7 @@
     align-items: center;
     justify-content: center;
     background-color: #2F302E;
+    -webkit-app-region: drag;
 
     .login-container {
         .login-title {
@@ -16,6 +17,8 @@
 
         .login-form {
             .login-input {
+                -webkit-app-region: no-drag;
+
                 input {
                     border: 0;
                     outline: 0;
@@ -35,6 +38,7 @@
             }
 
             .login-button {
+                -webkit-app-region: no-drag;
                 width: 100%;
                 border: 0;
                 outline: 0;
