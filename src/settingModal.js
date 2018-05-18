@@ -6,6 +6,45 @@ import Modal from './modal';
 import storage from './storage';
 import encrypt from './encrypt';
 
+class ImportPassword extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            status: 'normal'
+        };
+    }
+
+    handleImport(e) {
+        e.preventDefault();
+        this.handleImportActive(false);
+        const files = e.dataTransfer.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+        }
+    }
+
+    handleImportActive(status) {
+        this.setState({status});
+    }
+
+    render() {
+        const { status } = this.state;
+
+        return (
+            <div className="settingModal-import">
+                <div className={classNames({import: true, active: status === 'active'})}
+                    onDrop={e => this.handleImport(e)} 
+                    onDragEnter={() => this.handleImportActive('active')} 
+                    onDragLeave={() => this.handleImportActive('normal')}
+                    onDragOver={e => e.preventDefault()}>
+                    将CVS文件拖拽到此区域
+                </div>
+            </div>
+        );
+    }
+}
+
 class SettingModal extends React.Component {
     constructor(props) {
         super(props);
@@ -20,14 +59,12 @@ class SettingModal extends React.Component {
         this.modal.hide();
     }
 
-    handleSubmit() {
-        this.props.onOk();
-    }
-
     render() {
         return (
-            <Modal ref={modal => this.modal = modal} title="设置" onOk={() => this.handleSubmit()} onCancel={() => this.props.onCancel()}>
-                <div className="pw-settingModal"></div>
+            <Modal ref={modal => this.modal = modal} title="设置" onOk={() => this.onOk()} onCancel={() => this.props.onCancel()}>
+                <div className="pw-settingModal">
+                    <ImportPassword/>
+                </div>
             </Modal>
         );
     }

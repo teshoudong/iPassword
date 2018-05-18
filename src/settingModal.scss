@@ -1,0 +1,21 @@
+.pw-settingModal {
+    .settingModal-import {
+        padding: 20px;
+
+        .import {
+            border: 1px dashed #A2A2A2;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: #A2A2A2;
+            cursor: pointer;
+
+            &.active {
+                border-color: #DA3610;
+                color: #DA3610;
+            }
+        }
+    }
+}

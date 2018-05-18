@@ -36691,16 +36691,80 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SettingModal = function (_React$Component) {
-    _inherits(SettingModal, _React$Component);
+var ImportPassword = function (_React$Component) {
+    _inherits(ImportPassword, _React$Component);
+
+    function ImportPassword(props) {
+        _classCallCheck(this, ImportPassword);
+
+        var _this = _possibleConstructorReturn(this, (ImportPassword.__proto__ || Object.getPrototypeOf(ImportPassword)).call(this, props));
+
+        _this.state = {
+            status: 'normal'
+        };
+        return _this;
+    }
+
+    _createClass(ImportPassword, [{
+        key: 'handleImport',
+        value: function handleImport(e) {
+            e.preventDefault();
+            this.handleImportActive(false);
+            var files = e.dataTransfer.files;
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+            }
+        }
+    }, {
+        key: 'handleImportActive',
+        value: function handleImportActive(status) {
+            this.setState({ status: status });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var status = this.state.status;
+
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'settingModal-import' },
+                _react2.default.createElement(
+                    'div',
+                    { className: (0, _classnames2.default)({ import: true, active: status === 'active' }),
+                        onDrop: function onDrop(e) {
+                            return _this2.handleImport(e);
+                        },
+                        onDragEnter: function onDragEnter() {
+                            return _this2.handleImportActive('active');
+                        },
+                        onDragLeave: function onDragLeave() {
+                            return _this2.handleImportActive('normal');
+                        },
+                        onDragOver: function onDragOver(e) {
+                            return e.preventDefault();
+                        } },
+                    '\u5C06CVS\u6587\u4EF6\u62D6\u62FD\u5230\u6B64\u533A\u57DF'
+                )
+            );
+        }
+    }]);
+
+    return ImportPassword;
+}(_react2.default.Component);
+
+var SettingModal = function (_React$Component2) {
+    _inherits(SettingModal, _React$Component2);
 
     function SettingModal(props) {
         _classCallCheck(this, SettingModal);
 
-        var _this = _possibleConstructorReturn(this, (SettingModal.__proto__ || Object.getPrototypeOf(SettingModal)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (SettingModal.__proto__ || Object.getPrototypeOf(SettingModal)).call(this, props));
 
-        _this.state = {};
-        return _this;
+        _this3.state = {};
+        return _this3;
     }
 
     _createClass(SettingModal, [{
@@ -36714,25 +36778,24 @@ var SettingModal = function (_React$Component) {
             this.modal.hide();
         }
     }, {
-        key: 'handleSubmit',
-        value: function handleSubmit() {
-            this.props.onOk();
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this4 = this;
 
             return _react2.default.createElement(
                 _modal2.default,
                 { ref: function ref(modal) {
-                        return _this2.modal = modal;
+                        return _this4.modal = modal;
                     }, title: '\u8BBE\u7F6E', onOk: function onOk() {
-                        return _this2.handleSubmit();
+                        return _this4.onOk();
                     }, onCancel: function onCancel() {
-                        return _this2.props.onCancel();
+                        return _this4.props.onCancel();
                     } },
-                _react2.default.createElement('div', { className: 'pw-settingModal' })
+                _react2.default.createElement(
+                    'div',
+                    { className: 'pw-settingModal' },
+                    _react2.default.createElement(ImportPassword, null)
+                )
             );
         }
     }]);
@@ -37406,7 +37469,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".pw-settingModal .settingModal-import {\n  padding: 20px; }\n  .pw-settingModal .settingModal-import .import {\n    border: 1px dashed #A2A2A2;\n    height: 100px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    font-size: 12px;\n    color: #A2A2A2;\n    cursor: pointer; }\n    .pw-settingModal .settingModal-import .import.active {\n      border-color: #DA3610;\n      color: #DA3610; }\n", ""]);
 
 // exports
 
