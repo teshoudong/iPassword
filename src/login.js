@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './login.scss';
 import storage from './storage';
 import encrypt from './encrypt';
+import agent from './agent';
 
 class Login extends React.Component {
     constructor(props) {
@@ -24,17 +25,17 @@ class Login extends React.Component {
                     storage.saveKeyPassword(encrypt.encryptMd5(password));
                     this.props.onLogin(password);
                 } else {
-                    alert('两次密码不一致');
+                    agent.errorDialog('两次密码不一致');
                 }
             } else {
                 if (encrypt.encryptMd5(password) === storage.getKeyPassword()) {
                     this.props.onLogin(password);
                 } else {
-                    alert('密码不正确');
+                    agent.errorDialog('密码不正确');
                 }
             }
         } else {
-            alert('请输入密码');
+            agent.errorDialog('请输入密码');
         }
     }
 

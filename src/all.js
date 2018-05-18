@@ -63,8 +63,13 @@ class List extends React.Component {
             {
                 label: '删除',
                 click: () => {
-                    const list = storage.delPassword(item);
-                    this.getPasswordMap(list);
+                    agent.confirmDialog({
+                        content: `是否删除${item.name}?`,
+                        onOk: () => {
+                            const list = storage.delPassword(item);
+                            this.getPasswordMap(list);
+                        }
+                    });
                 }
             }
         ]);

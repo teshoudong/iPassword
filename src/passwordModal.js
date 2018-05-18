@@ -5,6 +5,7 @@ import './passwordModal.scss';
 import Modal from './modal';
 import storage from './storage';
 import encrypt from './encrypt';
+import agent from './agent';
 
 class PasswordModal extends React.Component {
     constructor(props) {
@@ -43,7 +44,7 @@ class PasswordModal extends React.Component {
             this.hide();
             this.props.onOk();
         } else {
-            alert('漏填了');
+            agent.errorDialog('漏填了');
         }
     }
 

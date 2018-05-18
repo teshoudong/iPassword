@@ -1,5 +1,5 @@
 import { shell, remote } from 'electron';
-const { Menu, MenuItem } = remote;
+const { Menu, MenuItem, dialog } = remote;
 
 
 
@@ -14,5 +14,24 @@ export default {
     },
     openUrl(url) {
         shell.openExternal(url);
+    },
+    confirmDialog(params = {}) {
+        params = Object.assign({
+            content: '',
+            onOk: () => {},
+            onCancel: () => {}
+        }, params);
+
+        dialog.showMessageBox({
+            type: 'question',
+            buttons: ['确定', '取消'],
+            title: '',
+            message: params.content
+        }, response => {
+            response === 0 ? params.onOk() : params.onCancel();
+        })
+    },
+    errorDialog(content) {
+        dialog.showErrorBox('', content);
     }
 };
