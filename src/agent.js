@@ -1,5 +1,4 @@
 import { shell, remote } from 'electron';
-import csv from 'node-csv';
 const { Menu, MenuItem, dialog } = remote;
 
 export default {
@@ -41,16 +40,7 @@ export default {
             message: content
         })
     },
-    getCSVData(file) {
-        return new Promise((resolve, reject) => {
-            csv.createParser().mapFile(file.path, (err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(data);
-                }
-            });
-        });
-        
+    fileDialog(callback) {
+        dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] }, callback);
     }
 };

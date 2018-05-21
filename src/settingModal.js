@@ -7,6 +7,7 @@ import storage from './storage';
 import encrypt from './encrypt';
 import agent from './agent';
 import moment from 'moment';
+import csv from './csv';
 
 class ImportPassword extends React.Component {
     constructor(props) {
@@ -31,12 +32,17 @@ class ImportPassword extends React.Component {
         e.preventDefault();
         this.handleImportActive(false);
         const files = e.dataTransfer.files;
-        const keyPassword = storage.getSessionPassword();
-        
-        const promiseList = [];
+        const filePaths = [];
         for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const promise = agent.getCSVData(file).then(data => {
+            filePaths.push(files[i].path);
+        }
+        this.importFiles(filePaths);
+    }
+
+    importFiles(filePaths) {
+        const keyPassword = storage.getSessionPassword();
+        const promiseList = filePaths.map(filePath => {
+            return csv.getCSVData(filePath).then(data => {
                 const list = data.map(item => {
                     const encryptPassword = encrypt.encrypt(item.password, keyPassword);
                     return {
@@ -50,8 +56,8 @@ class ImportPassword extends React.Component {
             }, err => {
                 return Promise.reject(err);
             });
-            promiseList.push(promise);
-        }
+        });
+        
         Promise.all(promiseList).then(list => {
             storage.saveHistory();
             list.forEach(item => {
@@ -81,6 +87,14 @@ class ImportPassword extends React.Component {
         });
     }
 
+    handleSelect() {
+        agent.fileDialog(files => {
+            if (files && files.length > 0) {
+                this.importFiles(files);
+            }
+        });
+    }
+
     renderOperation() {
         const { history } = this.state;
 
@@ -101,6 +115,7 @@ class ImportPassword extends React.Component {
         return (
             <div className="settingModal-import">
                 <div className={classNames({import: true, active: status === 'active'})}
+                    onClick={() => this.handleSelect()}
                     onDrop={e => this.handleImport(e)} 
                     onDragEnter={() => this.handleImportActive('active')} 
                     onDragLeave={() => this.handleImportActive('normal')}

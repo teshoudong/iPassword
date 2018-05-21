@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-module.exports = {
+const config = {
     target: 'electron',
     entry: {
         main: './src/index.js'
@@ -33,7 +33,13 @@ module.exports = {
         noParse: [/\bagent\b/, /\bencrypt\b/]
     },
     plugins: [
-        // new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}}),
-        new webpack.IgnorePlugin(new RegExp('^(electron|fs|path|node-csv)$'))
+        // new webpack.IgnorePlugin(new RegExp('^(electron|fs|path)$')),
+        new webpack.IgnorePlugin(/^fs$/, /node-csv$/)
     ]
 };
+
+if (process.env.NODE_ENV !== 'dev') {
+    config.plugins.push(new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}}));
+}
+
+module.exports = config;
