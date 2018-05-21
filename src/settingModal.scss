@@ -17,5 +17,31 @@
                 color: #DA3610;
             }
         }
+
+        .operation {
+            padding-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+
+            .undo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 12px;
+                color: #A2A2A2;
+                cursor: pointer;
+    
+                &::before {
+                    content: ' ';
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    background: url(./assets/undo.svg) no-repeat center center;
+                    background-size: cover;
+                    margin-right: 2px;
+                }
+            }
+        }
+        
     }
 }

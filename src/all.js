@@ -204,6 +204,16 @@ class All extends React.Component {
         this.state = {
             selectedPassword: null
         };
+
+        this.refreshList = () => {
+            this.list.getPasswordMap();
+        };
+
+        window.addEventListener('refreshList', this.refreshList);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('refreshList', this.refreshList);
     }
 
     handleSelectPassword(password) {
@@ -225,7 +235,7 @@ class All extends React.Component {
 
         return (
             <div className="pw-all">
-                <List onSelect={password => this.handleSelectPassword(password)}/>
+                <List onSelect={password => this.handleSelectPassword(password)} ref={list => this.list = list}/>
                 <Detail info={selectedPassword} onClose={() => this.handleCloseDetail()}/>
             </div>
         );

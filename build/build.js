@@ -5445,6 +5445,38 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = {
+    getHistory: function getHistory() {
+        var historyStr = localStorage.getItem('history');
+        if (historyStr) {
+            var history = JSON.parse(historyStr);
+            return history;
+        } else {
+            return null;
+        }
+    },
+    saveHistory: function saveHistory() {
+        var passwordListStr = localStorage.getItem('passwordList');
+        var passwordList = passwordListStr ? JSON.parse(passwordListStr) : [];
+        var time = +new Date();
+        var history = {
+            time: time,
+            passwordList: passwordList
+        };
+        var historyStr = JSON.stringify(history);
+        localStorage.setItem('history', historyStr);
+
+        return history;
+    },
+    recoverHistory: function recoverHistory() {
+        var historyStr = localStorage.getItem('history');
+        var history = JSON.parse(historyStr);
+        var passwordList = history.passwordList;
+        var passwordListStr = JSON.stringify(passwordList);
+        localStorage.setItem('passwordList', passwordListStr);
+        localStorage.removeItem('history');
+
+        return history;
+    },
     savePassword: function savePassword(password) {
         var passwordListStr = localStorage.getItem('passwordList');
         var passwordList = passwordListStr ? JSON.parse(passwordListStr) : [];
@@ -5453,6 +5485,25 @@ exports.default = {
         password.createTime = time;
         password.updateTime = time;
         passwordList.push(password);
+        passwordListStr = JSON.stringify(passwordList);
+        localStorage.setItem('passwordList', passwordListStr);
+
+        return passwordList;
+    },
+    savePasswordList: function savePasswordList(list) {
+        var passwordListStr = localStorage.getItem('passwordList');
+        var passwordList = passwordListStr ? JSON.parse(passwordListStr) : [];
+
+        list = list.map(function (password, index) {
+            var time = +new Date();
+            password.id = +new Date() + index;
+            password.createTime = time;
+            password.updateTime = time;
+
+            return password;
+        });
+
+        passwordList = passwordList.concat(list);
         passwordListStr = JSON.stringify(passwordList);
         localStorage.setItem('passwordList', passwordListStr);
 
@@ -5790,6 +5841,81 @@ exports.default = {
 
 /***/ }),
 /* 17 */
+/***/ (function(module, exports) {
+
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _electron = require('electron');
+
+var _nodeCsv = require('node-csv');
+
+var _nodeCsv2 = _interopRequireDefault(_nodeCsv);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Menu = _electron.remote.Menu,
+    MenuItem = _electron.remote.MenuItem,
+    dialog = _electron.remote.dialog;
+exports.default = {
+    showMenu: function showMenu(template) {
+        var menu = new Menu();
+        template.forEach(function (item) {
+            menu.append(new MenuItem(item));
+        });
+
+        menu.popup();
+    },
+    openUrl: function openUrl(url) {
+        _electron.shell.openExternal(url);
+    },
+    confirmDialog: function confirmDialog() {
+        var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        params = Object.assign({
+            content: '',
+            onOk: function onOk() {},
+            onCancel: function onCancel() {}
+        }, params);
+
+        dialog.showMessageBox({
+            type: 'question',
+            buttons: ['确定', '取消'],
+            title: '',
+            message: params.content
+        }, function (response) {
+            response === 0 ? params.onOk() : params.onCancel();
+        });
+    },
+    errorDialog: function errorDialog(content) {
+        dialog.showErrorBox('', content);
+    },
+    successDialog: function successDialog(content) {
+        dialog.showMessageBox({
+            type: 'info',
+            buttons: ['确定'],
+            title: '',
+            message: content
+        });
+    },
+    getCSVData: function getCSVData(file) {
+        return new Promise(function (resolve, reject) {
+            _nodeCsv2.default.createParser().mapFile(file.path, function (err, data) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    }
+};
+
+/***/ }),
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5865,7 +5991,7 @@ var locationsAreEqual = function locationsAreEqual(a, b) {
 };
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5881,7 +6007,7 @@ var locationsAreEqual = function locationsAreEqual(a, b) {
 if (process.env.NODE_ENV !== 'production') {
   var invariant = __webpack_require__(9);
   var warning = __webpack_require__(14);
-  var ReactPropTypesSecret = __webpack_require__(19);
+  var ReactPropTypesSecret = __webpack_require__(20);
   var loggedTypeFailures = {};
 }
 
@@ -5931,7 +6057,7 @@ module.exports = checkPropTypes;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5950,7 +6076,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -6005,7 +6131,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6089,7 +6215,7 @@ var locationsAreEqual = exports.locationsAreEqual = function locationsAreEqual(a
 };
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6180,18 +6306,18 @@ var createTransitionManager = function createTransitionManager() {
 exports.default = createTransitionManager;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router_es_Router__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router_es_Router__ = __webpack_require__(25);
 // Written in this round about way for babel-transform-imports
 
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_react_router_es_Router__["a" /* default */]);
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6310,7 +6436,7 @@ Router.childContextTypes = {
 /* harmony default export */ __webpack_exports__["a"] = (Router);
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6387,7 +6513,7 @@ var matchPath = function matchPath(pathname) {
 /* harmony default export */ __webpack_exports__["a"] = (matchPath);
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6470,56 +6596,6 @@ var createTransitionManager = function createTransitionManager() {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (createTransitionManager);
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _electron = require('electron');
-
-var Menu = _electron.remote.Menu,
-    MenuItem = _electron.remote.MenuItem,
-    dialog = _electron.remote.dialog;
-exports.default = {
-    showMenu: function showMenu(template) {
-        var menu = new Menu();
-        template.forEach(function (item) {
-            menu.append(new MenuItem(item));
-        });
-
-        menu.popup();
-    },
-    openUrl: function openUrl(url) {
-        _electron.shell.openExternal(url);
-    },
-    confirmDialog: function confirmDialog() {
-        var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-        params = Object.assign({
-            content: '',
-            onOk: function onOk() {},
-            onCancel: function onCancel() {}
-        }, params);
-
-        dialog.showMessageBox({
-            type: 'question',
-            buttons: ['确定', '取消'],
-            title: '',
-            message: params.content
-        }, function (response) {
-            response === 0 ? params.onOk() : params.onCancel();
-        });
-    },
-    errorDialog: function errorDialog(content) {
-        dialog.showErrorBox('', content);
-    }
-};
 
 /***/ }),
 /* 28 */
@@ -7339,7 +7415,7 @@ Link.contextTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__matchPath__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__matchPath__ = __webpack_require__(26);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -19367,7 +19443,7 @@ var emptyObject = __webpack_require__(13);
 var invariant = __webpack_require__(9);
 var warning = __webpack_require__(14);
 var emptyFunction = __webpack_require__(5);
-var checkPropTypes = __webpack_require__(18);
+var checkPropTypes = __webpack_require__(19);
 
 // TODO: this is special because it gets imported during build.
 
@@ -21030,7 +21106,7 @@ var shallowEqual = __webpack_require__(32);
 var containsNode = __webpack_require__(33);
 var focusNode = __webpack_require__(34);
 var emptyObject = __webpack_require__(13);
-var checkPropTypes = __webpack_require__(18);
+var checkPropTypes = __webpack_require__(19);
 var hyphenateStyleName = __webpack_require__(172);
 var camelizeStyleName = __webpack_require__(174);
 
@@ -36661,7 +36737,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _classnames = __webpack_require__(20);
+var _classnames = __webpack_require__(21);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -36683,6 +36759,14 @@ var _encrypt = __webpack_require__(16);
 
 var _encrypt2 = _interopRequireDefault(_encrypt);
 
+var _agent = __webpack_require__(17);
+
+var _agent2 = _interopRequireDefault(_agent);
+
+var _moment = __webpack_require__(0);
+
+var _moment2 = _interopRequireDefault(_moment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -36700,20 +36784,64 @@ var ImportPassword = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (ImportPassword.__proto__ || Object.getPrototypeOf(ImportPassword)).call(this, props));
 
         _this.state = {
-            status: 'normal'
+            status: 'normal',
+            history: _storage2.default.getHistory()
         };
         return _this;
     }
 
     _createClass(ImportPassword, [{
+        key: 'refreshList',
+        value: function refreshList() {
+            window.dispatchEvent(new Event('refreshList'));
+        }
+    }, {
+        key: 'getHistory',
+        value: function getHistory() {
+            this.setState({
+                history: _storage2.default.getHistory()
+            });
+        }
+    }, {
         key: 'handleImport',
         value: function handleImport(e) {
+            var _this2 = this;
+
             e.preventDefault();
             this.handleImportActive(false);
             var files = e.dataTransfer.files;
+            var keyPassword = _storage2.default.getSessionPassword();
+
+            var promiseList = [];
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
+                var promise = _agent2.default.getCSVData(file).then(function (data) {
+                    var list = data.map(function (item) {
+                        var encryptPassword = _encrypt2.default.encrypt(item.password, keyPassword);
+                        return {
+                            account: item.username,
+                            name: item.name,
+                            encryptPassword: encryptPassword,
+                            website: item.url
+                        };
+                    });
+                    return Promise.resolve(list);
+                }, function (err) {
+                    return Promise.reject(err);
+                });
+                promiseList.push(promise);
             }
+            Promise.all(promiseList).then(function (list) {
+                _storage2.default.saveHistory();
+                list.forEach(function (item) {
+                    _storage2.default.savePasswordList(item);
+                });
+                _this2.getHistory();
+                _agent2.default.successDialog('导入成功');
+                _this2.refreshList();
+            }, function () {
+                _agent2.default.errorDialog('导入失败');
+            });
         }
     }, {
         key: 'handleImportActive',
@@ -36721,9 +36849,48 @@ var ImportPassword = function (_React$Component) {
             this.setState({ status: status });
         }
     }, {
+        key: 'handleUndo',
+        value: function handleUndo(e, history) {
+            var _this3 = this;
+
+            e.preventDefault();
+            _agent2.default.confirmDialog({
+                content: '\u662F\u5426\u6062\u590D\u5230\u4E0A\u4E00\u6B21\u5BFC\u5165\u524D\uFF08' + (0, _moment2.default)(history.time).format('YYYY-MM-DD HH:ss:mm') + '\uFF09\u7684\u7ED3\u679C\uFF1F',
+                onOk: function onOk() {
+                    _storage2.default.recoverHistory();
+                    _this3.getHistory();
+                    _this3.refreshList();
+                }
+            });
+        }
+    }, {
+        key: 'renderOperation',
+        value: function renderOperation() {
+            var _this4 = this;
+
+            var history = this.state.history;
+
+
+            if (history) {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'operation' },
+                    _react2.default.createElement(
+                        'a',
+                        { className: 'undo', onClick: function onClick(e) {
+                                return _this4.handleUndo(e, history);
+                            } },
+                        '\u64A4\u9500'
+                    )
+                );
+            } else {
+                return null;
+            }
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this5 = this;
 
             var status = this.state.status;
 
@@ -36735,19 +36902,20 @@ var ImportPassword = function (_React$Component) {
                     'div',
                     { className: (0, _classnames2.default)({ import: true, active: status === 'active' }),
                         onDrop: function onDrop(e) {
-                            return _this2.handleImport(e);
+                            return _this5.handleImport(e);
                         },
                         onDragEnter: function onDragEnter() {
-                            return _this2.handleImportActive('active');
+                            return _this5.handleImportActive('active');
                         },
                         onDragLeave: function onDragLeave() {
-                            return _this2.handleImportActive('normal');
+                            return _this5.handleImportActive('normal');
                         },
                         onDragOver: function onDragOver(e) {
                             return e.preventDefault();
                         } },
                     '\u5C06CVS\u6587\u4EF6\u62D6\u62FD\u5230\u6B64\u533A\u57DF'
-                )
+                ),
+                this.renderOperation()
             );
         }
     }]);
@@ -36761,10 +36929,10 @@ var SettingModal = function (_React$Component2) {
     function SettingModal(props) {
         _classCallCheck(this, SettingModal);
 
-        var _this3 = _possibleConstructorReturn(this, (SettingModal.__proto__ || Object.getPrototypeOf(SettingModal)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (SettingModal.__proto__ || Object.getPrototypeOf(SettingModal)).call(this, props));
 
-        _this3.state = {};
-        return _this3;
+        _this6.state = {};
+        return _this6;
     }
 
     _createClass(SettingModal, [{
@@ -36780,16 +36948,16 @@ var SettingModal = function (_React$Component2) {
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this7 = this;
 
             return _react2.default.createElement(
                 _modal2.default,
                 { ref: function ref(modal) {
-                        return _this4.modal = modal;
+                        return _this7.modal = modal;
                     }, title: '\u8BBE\u7F6E', onOk: function onOk() {
-                        return _this4.onOk();
+                        return _this7.props.onOk();
                     }, onCancel: function onCancel() {
-                        return _this4.props.onCancel();
+                        return _this7.props.onCancel();
                     } },
                 _react2.default.createElement(
                     'div',
@@ -36834,8 +37002,8 @@ var invariant = __webpack_require__(9);
 var warning = __webpack_require__(14);
 var assign = __webpack_require__(8);
 
-var ReactPropTypesSecret = __webpack_require__(19);
-var checkPropTypes = __webpack_require__(18);
+var ReactPropTypesSecret = __webpack_require__(20);
+var checkPropTypes = __webpack_require__(19);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -37380,7 +37548,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 var emptyFunction = __webpack_require__(5);
 var invariant = __webpack_require__(9);
-var ReactPropTypesSecret = __webpack_require__(19);
+var ReactPropTypesSecret = __webpack_require__(20);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -37464,12 +37632,13 @@ if(false) {
 /* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var escape = __webpack_require__(15);
 exports = module.exports = __webpack_require__(6)(false);
 // imports
 
 
 // module
-exports.push([module.i, ".pw-settingModal .settingModal-import {\n  padding: 20px; }\n  .pw-settingModal .settingModal-import .import {\n    border: 1px dashed #A2A2A2;\n    height: 100px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    font-size: 12px;\n    color: #A2A2A2;\n    cursor: pointer; }\n    .pw-settingModal .settingModal-import .import.active {\n      border-color: #DA3610;\n      color: #DA3610; }\n", ""]);
+exports.push([module.i, ".pw-settingModal .settingModal-import {\n  padding: 20px; }\n  .pw-settingModal .settingModal-import .import {\n    border: 1px dashed #A2A2A2;\n    height: 100px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    font-size: 12px;\n    color: #A2A2A2;\n    cursor: pointer; }\n    .pw-settingModal .settingModal-import .import.active {\n      border-color: #DA3610;\n      color: #DA3610; }\n  .pw-settingModal .settingModal-import .operation {\n    padding-top: 10px;\n    display: flex;\n    justify-content: flex-end; }\n    .pw-settingModal .settingModal-import .operation .undo {\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      font-size: 12px;\n      color: #A2A2A2;\n      cursor: pointer; }\n      .pw-settingModal .settingModal-import .operation .undo::before {\n        content: ' ';\n        display: inline-block;\n        width: 10px;\n        height: 10px;\n        background: url(" + escape(__webpack_require__(232)) + ") no-repeat center center;\n        background-size: cover;\n        margin-right: 2px; }\n", ""]);
 
 // exports
 
@@ -37757,7 +37926,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_6__Redirect__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Route__ = __webpack_require__(41);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_7__Route__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Router__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Router__ = __webpack_require__(24);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_8__Router__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__StaticRouter__ = __webpack_require__(208);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_9__StaticRouter__["a"]; });
@@ -37807,7 +37976,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_history_createBrowserHistory__ = __webpack_require__(191);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_history_createBrowserHistory___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_history_createBrowserHistory__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(24);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -37882,11 +38051,11 @@ var _invariant = __webpack_require__(4);
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _LocationUtils = __webpack_require__(21);
+var _LocationUtils = __webpack_require__(22);
 
 var _PathUtils = __webpack_require__(11);
 
-var _createTransitionManager = __webpack_require__(22);
+var _createTransitionManager = __webpack_require__(23);
 
 var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
@@ -38187,7 +38356,7 @@ exports.default = createBrowserHistory;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_history_createHashHistory__ = __webpack_require__(193);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_history_createHashHistory___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_history_createHashHistory__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(24);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -38259,11 +38428,11 @@ var _invariant = __webpack_require__(4);
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _LocationUtils = __webpack_require__(21);
+var _LocationUtils = __webpack_require__(22);
 
 var _PathUtils = __webpack_require__(11);
 
-var _createTransitionManager = __webpack_require__(22);
+var _createTransitionManager = __webpack_require__(23);
 
 var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
@@ -38594,7 +38763,7 @@ exports.default = createHashHistory;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_history_createMemoryHistory__ = __webpack_require__(196);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_history_createMemoryHistory___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_history_createMemoryHistory__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__Router__ = __webpack_require__(25);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -38667,9 +38836,9 @@ var _warning2 = _interopRequireDefault(_warning);
 
 var _PathUtils = __webpack_require__(11);
 
-var _LocationUtils = __webpack_require__(21);
+var _LocationUtils = __webpack_require__(22);
 
-var _createTransitionManager = __webpack_require__(22);
+var _createTransitionManager = __webpack_require__(23);
 
 var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
@@ -39578,7 +39747,7 @@ Redirect.contextTypes = {
 /* unused harmony reexport createHashHistory */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__createMemoryHistory__ = __webpack_require__(207);
 /* unused harmony reexport createMemoryHistory */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LocationUtils__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__LocationUtils__ = __webpack_require__(18);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__LocationUtils__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__LocationUtils__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__PathUtils__ = __webpack_require__(12);
@@ -39603,9 +39772,9 @@ Redirect.contextTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_warning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_warning__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PathUtils__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__createTransitionManager__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__createTransitionManager__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__DOMUtils__ = __webpack_require__(43);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -39907,9 +40076,9 @@ var createBrowserHistory = function createBrowserHistory() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_warning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_warning__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PathUtils__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__createTransitionManager__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__createTransitionManager__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__DOMUtils__ = __webpack_require__(43);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -40227,8 +40396,8 @@ var createHashHistory = function createHashHistory() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_warning__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_warning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_warning__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PathUtils__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__createTransitionManager__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__LocationUtils__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__createTransitionManager__ = __webpack_require__(27);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -40413,7 +40582,7 @@ var createMemoryHistory = function createMemoryHistory() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_history_PathUtils__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_history_PathUtils___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_history_PathUtils__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Router__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Router__ = __webpack_require__(25);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
@@ -40605,7 +40774,7 @@ StaticRouter.childContextTypes = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_warning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_warning__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_invariant__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_invariant__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__matchPath__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__matchPath__ = __webpack_require__(26);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -40691,7 +40860,7 @@ Switch.propTypes = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router_es_matchPath__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_router_es_matchPath__ = __webpack_require__(26);
 // Written in this round about way for babel-transform-imports
 
 
@@ -40860,11 +41029,11 @@ var _moment = __webpack_require__(0);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _classnames = __webpack_require__(20);
+var _classnames = __webpack_require__(21);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _agent = __webpack_require__(27);
+var _agent = __webpack_require__(17);
 
 var _agent2 = _interopRequireDefault(_agent);
 
@@ -41231,10 +41400,21 @@ var All = function (_React$Component3) {
         _this7.state = {
             selectedPassword: null
         };
+
+        _this7.refreshList = function () {
+            _this7.list.getPasswordMap();
+        };
+
+        window.addEventListener('refreshList', _this7.refreshList);
         return _this7;
     }
 
     _createClass(All, [{
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            window.removeEventListener('refreshList', this.refreshList);
+        }
+    }, {
         key: 'handleSelectPassword',
         value: function handleSelectPassword(password) {
             var keyPassword = _storage2.default.getSessionPassword();
@@ -41263,6 +41443,8 @@ var All = function (_React$Component3) {
                 { className: 'pw-all' },
                 _react2.default.createElement(List, { onSelect: function onSelect(password) {
                         return _this8.handleSelectPassword(password);
+                    }, ref: function ref(list) {
+                        return _this8.list = list;
                     } }),
                 _react2.default.createElement(Detail, { info: selectedPassword, onClose: function onClose() {
                         return _this8.handleCloseDetail();
@@ -41351,7 +41533,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _classnames = __webpack_require__(20);
+var _classnames = __webpack_require__(21);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -41373,7 +41555,7 @@ var _encrypt = __webpack_require__(16);
 
 var _encrypt2 = _interopRequireDefault(_encrypt);
 
-var _agent = __webpack_require__(27);
+var _agent = __webpack_require__(17);
 
 var _agent2 = _interopRequireDefault(_agent);
 
@@ -42086,7 +42268,7 @@ var _encrypt = __webpack_require__(16);
 
 var _encrypt2 = _interopRequireDefault(_encrypt);
 
-var _agent = __webpack_require__(27);
+var _agent = __webpack_require__(17);
 
 var _agent2 = _interopRequireDefault(_agent);
 
@@ -42283,6 +42465,12 @@ exports.push([module.i, "* {\n  margin: 0;\n  padding: 0; }\n\nhtml,\nbody,\n#ap
 
 // exports
 
+
+/***/ }),
+/* 232 */
+/***/ (function(module, exports) {
+
+module.exports = "\"data:image/svg+xml,%3C?xml version='1.0' standalone='no'?%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg t='1526874332115' class='icon' style='' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='1893' xmlns:xlink='http://www.w3.org/1999/xlink' width='200' height='200'%3E%3Cdefs%3E%3Cstyle type='text/css'%3E%3C/style%3E%3C/defs%3E%3Cpath d='M504 0C374.4 0 257.6 48 166.4 126.4L49.6 9.6c-12.8-12.8-22.4-8-24 9.6L16 321.6c0 9.6 6.4 16 16 16l302.4-9.6c17.6 0 22.4-11.2 9.6-24l-108.8-108.8C307.2 132.8 401.6 96 504 96c230.4 0 416 185.6 416 416S734.4 928 504 928c-132.8 0-252.8-62.4-328-160l-70.4 65.6C200 950.4 342.4 1024 504 1024c283.2 0 512-228.8 512-512S787.2 0 504 0z' p-id='1894' fill='%23A2A2A2'%3E%3C/path%3E%3C/svg%3E\""
 
 /***/ })
 /******/ ]);

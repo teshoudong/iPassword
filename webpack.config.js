@@ -34,6 +34,6 @@ module.exports = {
     },
     plugins: [
         // new webpack.optimize.UglifyJsPlugin({minimize: true, output: {ascii_only: true}}),
-        new webpack.IgnorePlugin(new RegExp('^(electron|fs|path)$'))
+        new webpack.IgnorePlugin(new RegExp('^(electron|fs|path|node-csv)$'))
     ]
 };
