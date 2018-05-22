@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"export NODE_ENV=dev && webpack --watch\" \"export NODE_ENV=dev && electron ./main.js\"",
     "build": "webpack",
-    "pack": "electron-packager . iPassword --overwrite=true --icon=logo.icns --ignore=\"node_modules|src|webpack.config.js|.git|.gitignore|logo.sketch|logo.icns\""
+    "pack": "webpack && electron-packager . iPassword --overwrite=true --icon=logo.icns --ignore=\"node_modules|src|webpack.config.js|.git|.gitignore|logo.sketch|logo.icns\""
   },
   "repository": {
     "type": "git",

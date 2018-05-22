@@ -6,6 +6,7 @@ import Modal from './modal';
 import storage from './storage';
 import encrypt from './encrypt';
 import agent from './agent';
+import logo from './logo';
 
 class PasswordModal extends React.Component {
     constructor(props) {
@@ -20,29 +21,58 @@ class PasswordModal extends React.Component {
         const account = elements.account.value;
         const name = elements.name.value;
         const password = elements.password.value;
-        const website = elements.website.value || '';
+        let website = elements.website.value || '';
+
+        if (website && !website.startsWith('http')) {
+            if (website.startsWith('//')) {
+                website = `http:${website}`;
+            } else {
+                website = `http://${website}`;
+            }
+        }
 
         if (account && name && password) {
             const keyPassword = storage.getSessionPassword();
             const encryptPassword = encrypt.encrypt(password, keyPassword);
             if (this.item) {
-                storage.updatePassword({
-                    id: this.item.id,
-                    account,
-                    name,
-                    encryptPassword,
-                    website
-                });
+                if (website === this.item.website) {
+                    storage.updatePassword({
+                        id: this.item.id,
+                        img: this.item.img,
+                        account,
+                        name,
+                        encryptPassword,
+                        website
+                    });
+                    this.hide();
+                    this.props.onOk();
+                } else {
+                    logo.getLogo(website).then(logo => {
+                        storage.updatePassword({
+                            id: this.item.id,
+                            img: logo,
+                            account,
+                            name,
+                            encryptPassword,
+                            website
+                        });
+                        this.hide();
+                        this.props.onOk();
+                    });
+                }
             } else {
-                storage.savePassword({
-                    account,
-                    name,
-                    encryptPassword,
-                    website
+                logo.getLogo(website).then(logo => {
+                    storage.savePassword({
+                        img: logo,
+                        account,
+                        name,
+                        encryptPassword,
+                        website
+                    });
+                    this.hide();
+                    this.props.onOk();
                 });
             }
-            this.hide();
-            this.props.onOk();
         } else {
             agent.errorDialog('漏填了');
         }

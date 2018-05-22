@@ -95,14 +95,12 @@ class ImportPassword extends React.Component {
         });
     }
 
-    renderOperation() {
+    renderUndo() {
         const { history } = this.state;
 
         if (history) {
             return (
-                <div className="operation">
-                    <a className="undo" onClick={e => this.handleUndo(e, history)}>撤销</a>
-                </div>
+                <a className="undo" onClick={e => this.handleUndo(e, history)}>撤销</a>
             );
         } else {
             return null;
@@ -122,8 +120,9 @@ class ImportPassword extends React.Component {
                     onDragOver={e => e.preventDefault()}>
                     将CVS文件拖拽到此区域
                 </div>
-
-                {this.renderOperation()}
+                <div className="operation">
+                    {this.renderUndo()}
+                </div>
             </div>
         );
     }

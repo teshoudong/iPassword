@@ -34,7 +34,7 @@ const config = {
     },
     plugins: [
         // new webpack.IgnorePlugin(new RegExp('^(electron|fs|path)$')),
-        new webpack.IgnorePlugin(/^fs$/, /node-csv$/)
+        // new webpack.IgnorePlugin(/^fs$/, /node-csv$/)
     ]
 };
 
