@@ -1,7 +1,6 @@
 import request from 'request';
 import cheerio from 'cheerio';
 import path from 'path';
-import url from 'url';
 
 export default {
     getLogo(website) {
@@ -19,7 +18,7 @@ export default {
                         if (logo.startsWith('//')) {
                             logo = `http:${logo}`;
                         } else {
-                            logo = path.join(`http://${url.parse(website).host}`, logo);
+                            logo = path.join(`http://${response.request.host}`, logo);
                         }
                     }
 
