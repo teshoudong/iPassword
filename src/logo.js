@@ -15,7 +15,7 @@ export default {
                 if (!error && response.statusCode == 200) {
                     const $ = cheerio.load(body);
                     let logo = $('link[rel=apple-touch-icon-precomposed]').attr('href') || $('link[rel=apple-touch-icon]').attr('href');
-                    if (!logo.startsWith('data:image') &&!logo.startsWith('http')) {
+                    if (!logo.startsWith('data:image') && !logo.startsWith('http')) {
                         if (logo.startsWith('//')) {
                             logo = `http:${logo}`;
                         } else {
