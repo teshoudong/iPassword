@@ -45,7 +45,7 @@ export default {
         passwordListStr = JSON.stringify(passwordList);
         localStorage.setItem('passwordList', passwordListStr);
 
-        return passwordList;
+        return password;
     },
 
     savePasswordList(list) {
@@ -92,7 +92,7 @@ export default {
         });
         passwordListStr = JSON.stringify(passwordList);
         localStorage.setItem('passwordList', passwordListStr);
-        return passwordList;
+        return password;
     },
 
     getPasswordList() {
@@ -102,6 +102,7 @@ export default {
 
     saveKeyPassword(password) {
         localStorage.setItem('keypassword', password);
+        return password;
     },
 
     getKeyPassword() {
@@ -109,7 +110,8 @@ export default {
     },
 
     saveSessionPassword(password) {
-        return sessionStorage.setItem('keypassword', password);
+        sessionStorage.setItem('keypassword', password);
+        return password;
     },
 
     getSessionPassword() {

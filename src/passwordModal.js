@@ -34,43 +34,34 @@ class PasswordModal extends React.Component {
         if (account && name && password) {
             const keyPassword = storage.getSessionPassword();
             const encryptPassword = encrypt.encrypt(password, keyPassword);
+            let passwordObj = null;
             if (this.item) {
-                if (website === this.item.website) {
-                    storage.updatePassword({
-                        id: this.item.id,
-                        img: this.item.img,
-                        account,
-                        name,
-                        encryptPassword,
-                        website
-                    });
-                    this.hide();
-                    this.props.onOk();
-                } else {
-                    logo.getLogo(website).then(logo => {
-                        storage.updatePassword({
-                            id: this.item.id,
-                            img: logo,
-                            account,
-                            name,
-                            encryptPassword,
-                            website
-                        });
-                        this.hide();
-                        this.props.onOk();
-                    });
-                }
+                passwordObj = storage.updatePassword({
+                    id: this.item.id,
+                    img: this.item.img || '',
+                    account,
+                    name,
+                    encryptPassword,
+                    website
+                });
             } else {
-                logo.getLogo(website).then(logo => {
-                    storage.savePassword({
-                        img: logo,
-                        account,
-                        name,
-                        encryptPassword,
-                        website
-                    });
-                    this.hide();
-                    this.props.onOk();
+                passwordObj = storage.savePassword({
+                    account,
+                    name,
+                    encryptPassword,
+                    website
+                });
+            }
+            this.hide();
+            this.props.onOk();
+
+            if (passwordObj.website) {
+                logo.getLogo(passwordObj.website).then(logo => {
+                    if (logo) {
+                        passwordObj.img = logo;
+                        storage.updatePassword(passwordObj);
+                        this.props.onOk();
+                    }
                 });
             }
         } else {
