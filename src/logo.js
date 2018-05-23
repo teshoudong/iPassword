@@ -3,7 +3,23 @@ import cheerio from 'cheerio';
 import path from 'path';
 
 export default {
-    getLogo(website) {
+    getLogoByName(name) {
+        return new Promise((resolve, reject) => {
+            request(`http://android.myapp.com/myapp/getSearchSuggest.htm?kw=${encodeURIComponent(name)}`, (error, response, body) => {
+                if (!error && response.statusCode == 200) {
+                    const data = JSON.parse(body);
+                    if (data && data.obj && data.obj.obj && data.obj.obj.length > 0) {
+                        resolve(data.obj.obj[0].iconUrl);
+                    } else {
+                        resolve(null);
+                    }
+                } else {
+                    resolve(null);
+                }
+            });
+        });
+    },
+    getLogoByWebsite(website) {
         return new Promise((resolve, reject) => {
             request({
                 url: website,
@@ -32,5 +48,33 @@ export default {
                 }
             })
         });
+    },
+    getLogo({website, name}) {
+        return new Promise((resolve, reject) => {
+            if (website) {
+                this.getLogoByWebsite(website).then(logo => {
+                    if (logo) {
+                        resolve(logo);
+                    } else {
+                        this.getLogoByName(name).then(logo => {
+                            if (logo) {
+                                resolve(logo);
+                            } else {
+                                resolve(null);
+                            }
+                        });
+                    }
+                })
+            } else {
+                this.getLogoByName(name).then(logo => {
+                    if (logo) {
+                        resolve(logo);
+                    } else {
+                        resolve(null);
+                    }
+                });
+            }
+        });
+        
     }
 };

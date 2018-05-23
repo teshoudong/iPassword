@@ -55,15 +55,13 @@ class PasswordModal extends React.Component {
             this.hide();
             this.props.onOk();
 
-            if (passwordObj.website) {
-                logo.getLogo(passwordObj.website).then(logo => {
-                    if (logo) {
-                        passwordObj.img = logo;
-                        storage.updatePassword(passwordObj);
-                        this.props.onOk();
-                    }
-                });
-            }
+            logo.getLogo(passwordObj).then(logo => {
+                if (logo) {
+                    passwordObj.img = logo;
+                    storage.updatePassword(passwordObj);
+                    this.props.onOk();
+                }
+            });
         } else {
             agent.errorDialog('漏填了');
         }

@@ -71479,15 +71479,13 @@ var PasswordModal = function (_React$Component) {
                 this.hide();
                 this.props.onOk();
 
-                if (passwordObj.website) {
-                    _logo2.default.getLogo(passwordObj.website).then(function (logo) {
-                        if (logo) {
-                            passwordObj.img = logo;
-                            _storage2.default.updatePassword(passwordObj);
-                            _this2.props.onOk();
-                        }
-                    });
-                }
+                _logo2.default.getLogo(passwordObj).then(function (logo) {
+                    if (logo) {
+                        passwordObj.img = logo;
+                        _storage2.default.updatePassword(passwordObj);
+                        _this2.props.onOk();
+                    }
+                });
             } else {
                 _agent2.default.errorDialog('漏填了');
             }
@@ -71702,7 +71700,23 @@ var _path2 = _interopRequireDefault(_path);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    getLogo: function getLogo(website) {
+    getLogoByName: function getLogoByName(name) {
+        return new Promise(function (resolve, reject) {
+            (0, _request2.default)('http://android.myapp.com/myapp/getSearchSuggest.htm?kw=' + encodeURIComponent(name), function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    var data = JSON.parse(body);
+                    if (data && data.obj && data.obj.obj && data.obj.obj.length > 0) {
+                        resolve(data.obj.obj[0].iconUrl);
+                    } else {
+                        resolve(null);
+                    }
+                } else {
+                    resolve(null);
+                }
+            });
+        });
+    },
+    getLogoByWebsite: function getLogoByWebsite(website) {
         return new Promise(function (resolve, reject) {
             (0, _request2.default)({
                 url: website,
@@ -71730,6 +71744,38 @@ exports.default = {
                     resolve(null);
                 }
             });
+        });
+    },
+    getLogo: function getLogo(_ref) {
+        var _this = this;
+
+        var website = _ref.website,
+            name = _ref.name;
+
+        return new Promise(function (resolve, reject) {
+            if (website) {
+                _this.getLogoByWebsite(website).then(function (logo) {
+                    if (logo) {
+                        resolve(logo);
+                    } else {
+                        _this.getLogoByName(name).then(function (logo) {
+                            if (logo) {
+                                resolve(logo);
+                            } else {
+                                resolve(null);
+                            }
+                        });
+                    }
+                });
+            } else {
+                _this.getLogoByName(name).then(function (logo) {
+                    if (logo) {
+                        resolve(logo);
+                    } else {
+                        resolve(null);
+                    }
+                });
+            }
         });
     }
 };
