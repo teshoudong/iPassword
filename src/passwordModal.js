@@ -58,6 +58,7 @@ class PasswordModal extends React.Component {
             logo.getLogo(passwordObj).then(logo => {
                 if (logo) {
                     passwordObj.img = logo;
+                    // 保存logo这块需要优化
                     storage.updatePassword(passwordObj);
                     this.props.onOk();
                 }

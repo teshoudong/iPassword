@@ -31,7 +31,9 @@ const config = {
             }
         ]
     },
-    plugins: []
+    plugins: [
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+    ]
 };
 
 if (process.env.NODE_ENV !== 'dev') {

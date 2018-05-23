@@ -8,6 +8,7 @@ import encrypt from './encrypt';
 import agent from './agent';
 import moment from 'moment';
 import csv from './csv';
+import logo from './logo';
 
 class ImportPassword extends React.Component {
     constructor(props) {
@@ -60,9 +61,23 @@ class ImportPassword extends React.Component {
         
         Promise.all(promiseList).then(list => {
             storage.saveHistory();
+
+            // 更新logo
+            const promiseList = [];
             list.forEach(item => {
-                storage.savePasswordList(item);
+                const list = storage.savePasswordList(item);
+                promiseList.concat(list.map(item => {
+                    return new Promise((resolve, reject)=> {
+                        logo.getLogo(item).then(logo => {
+                            item.img = logo;
+                            // 保存logo这块需要优化
+                            storage.updatePassword(item);
+                        });
+                    });
+                }));
             });
+            Promise.all(promiseList).then(() => this.refreshList());
+
             this.getHistory();
             agent.successDialog('导入成功');
             this.refreshList();
