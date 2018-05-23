@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 
 const config = {
-    target: 'electron',
+    target: 'electron-renderer',
     entry: {
         main: './src/index.js'
     },
@@ -29,13 +29,9 @@ const config = {
                 exclude: /node_modules/,
                 loader: 'svg-url-loader'
             }
-        ],
-        noParse: [/\bagent\b/, /\bencrypt\b/]
+        ]
     },
-    plugins: [
-        // new webpack.IgnorePlugin(new RegExp('^(electron|fs|path)$')),
-        // new webpack.IgnorePlugin(/^fs$/, /node-csv$/)
-    ]
+    plugins: []
 };
 
 if (process.env.NODE_ENV !== 'dev') {
