@@ -22,13 +22,13 @@ class Login extends React.Component {
             if (isFirst) {
                 const confirm = elements.confirm.value;
                 if (confirm === password) {
-                    storage.saveKeyPassword(encrypt.encryptMd5(password));
+                    storage.saveKeyPassword(encrypt.encryptSHA256(password));
                     this.props.onLogin(password);
                 } else {
                     agent.errorDialog('两次密码不一致');
                 }
             } else {
-                if (encrypt.encryptMd5(password) === storage.getKeyPassword()) {
+                if (encrypt.encryptSHA256(password) === storage.getKeyPassword()) {
                     this.props.onLogin(password);
                 } else {
                     agent.errorDialog('密码不正确');

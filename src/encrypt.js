@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 
 export default {
-    encryptMd5(str) {
-        return crypto.createHash('md5').update(str).digest('hex').toLowerCase();
+    encryptSHA256(str) {
+        return crypto.createHash('sha256').update(str).digest('hex');
     },
 
     encrypt(str, key) {    
