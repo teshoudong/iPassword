@@ -1,4 +1,4 @@
-import { shell, remote } from 'electron';
+import { shell, remote, clipboard } from 'electron';
 const { Menu, MenuItem, dialog } = remote;
 
 export default {
@@ -42,5 +42,8 @@ export default {
     },
     fileDialog(callback) {
         dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] }, callback);
+    },
+    clipboard(text) {
+        clipboard.writeText(text);
     }
 };

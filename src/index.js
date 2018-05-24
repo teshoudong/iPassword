@@ -21,12 +21,19 @@ class App extends React.Component {
         });
     }
 
+    handleLock() {
+        storage.delSessionPassword();
+        this.setState({
+            isLogin: false
+        });
+    }
+
     render() {
         if (this.state.isLogin) {
             return (
                 <div className="container">
                     <div className="container-menu">
-                        <Menu/>
+                        <Menu onLock={() => this.handleLock()}/>
                     </div>
                     <div className="container-page">
                         <Page/>

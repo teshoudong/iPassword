@@ -116,5 +116,10 @@ export default {
 
     getSessionPassword() {
         return sessionStorage.getItem('keypassword') || '';
+    },
+
+    delSessionPassword() {
+        sessionStorage.removeItem('keypassword');
+        return null;
     }
 };

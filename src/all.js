@@ -52,7 +52,7 @@ class List extends React.Component {
         this.getPasswordMap(result);
     }
 
-    handleMenu(item, key) {
+    handleMenu(item) {
         agent.showMenu([
             {
                 label: '编辑',
@@ -71,6 +71,20 @@ class List extends React.Component {
                         }
                     });
                 }
+            },
+            {
+                label: '拷贝账号',
+                click: () => {
+                    agent.clipboard(item.account);
+                }
+            },
+            {
+                label: '拷贝密码',
+                click: () => {
+                    const keyPassword = storage.getSessionPassword();
+                    const password = encrypt.decipher(item.encryptPassword, keyPassword);
+                    agent.clipboard(password);
+                }
             }
         ]);
     }
@@ -82,7 +96,7 @@ class List extends React.Component {
                 <h1 className="list-title">{key}</h1>
                 {
                     map[key].map(item => (
-                        <div className="list-item" key={item.id} onContextMenu={() => this.handleMenu(item, key)} onClick={() => this.handleSelect(item)}>
+                        <div className="list-item" key={item.id} onContextMenu={() => this.handleMenu(item)} onClick={() => this.handleSelect(item)}>
                             <div className="img">
                                 {item.img && <img src={item.img}/>}
                             </div>

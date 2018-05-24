@@ -47,5 +47,14 @@
             -webkit-app-region: no-drag;
             cursor: pointer;
         }
+
+        .menu-lock {
+            width: 20px;
+            height: 20px;
+            background: url(./assets/lock.svg) no-repeat center center;
+            background-size: cover;
+            -webkit-app-region: no-drag;
+            cursor: pointer;
+        }
     }
 }
