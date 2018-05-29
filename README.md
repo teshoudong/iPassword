@@ -40,3 +40,7 @@
  - 使用 [electron-packager](https://github.com/electron-userland/electron-packager) 进行打包
  - 在项目根目录下执行`npm run pack`，会自动进行打包
 
+    ```bash
+    npm run pack
+    ```
+
