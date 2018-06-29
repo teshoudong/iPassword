@@ -9,6 +9,8 @@ import agent from './agent';
 import moment from 'moment';
 import csv from './csv';
 import logo from './logo';
+import server from './server';
+import QRCode from 'qrcode.react';
 
 class ImportPassword extends React.Component {
     constructor(props) {
@@ -143,13 +145,59 @@ class ImportPassword extends React.Component {
     }
 }
 
+class AppQrcode extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            url: ''
+        };
+        this.createServer();
+    }
+
+    componentWillUnmount() {
+        this.server.shutdown();
+    }
+
+    createServer() {
+        this.server = server.createHttpServerForApp(port => {
+            this.setState({
+                url: `http://${server.getLocalIP()}:${port}`
+            });
+        });
+    }
+
+    render() {
+        const { url } = this.state;
+
+        return (
+            <div className="settingModal-app">
+                {url ? <QRCode value={url}/> : <div className="qrcode"></div>}
+            </div>
+        );
+    }
+}
+
 class SettingModal extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.list = [
+            {
+                name: '导入',
+                type: 'import',
+                render: <ImportPassword/>
+            },
+            {
+                name: 'APP',
+                type: 'app',
+                render: <AppQrcode/>
+            }
+        ];
+        this.state = {
+            type: 'import'
+        };
     }
 
-    show(item) {
+    show() {
         this.modal.show();
     }
 
@@ -157,11 +205,35 @@ class SettingModal extends React.Component {
         this.modal.hide();
     }
 
+    handleType(type) {
+        this.setState({
+            type
+        });
+    }
+
+    renderContent() {
+        const { type } = this.state;
+        const item = this.list.find(item => item.type === type);
+
+        return item && item.render;
+    }
+
     render() {
+        const { type } = this.state;
+
         return (
             <Modal ref={modal => this.modal = modal} title="设置" onOk={() => this.props.onOk()} onCancel={() => this.props.onCancel()}>
                 <div className="pw-settingModal">
-                    <ImportPassword/>
+                    <div className="settingModal-tab">
+                        <div className="list">
+                            {
+                                this.list.map(item => (
+                                    <div onClick={() => this.handleType(item.type)} className={classNames({item: true, active: type === item.type})} key={item.type}>{item.name}</div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    {this.renderContent()}
                 </div>
             </Modal>
         );
