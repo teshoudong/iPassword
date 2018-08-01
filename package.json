@@ -45,6 +45,7 @@
     "moment": "^2.20.1",
     "node-csv": "^0.1.2",
     "prop-types": "^15.6.0",
+    "qrcode.react": "^0.8.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",

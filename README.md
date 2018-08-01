@@ -2,6 +2,10 @@
 
 这是一个用于管理密码的小工具，基于 [Electron](http://electron.atom.io/) 开发，同时使用了 [fuzzy](https://github.com/mattyork/fuzzy)、[node-csv](https://github.com/adaltas/node-csv) 等类库
 
+## 下载地址
+
++ [Mac](https://github.com/teshoudong/iPassword/releases/download/1.0.1/iPassword-macOS-x64_v1.0.1.zip)
+
 ## 截图
 
 <img src="https://raw.githubusercontent.com/teshoudong/iPassword/master/capture1.png" alt="Capture" width="980" style="border:1px solid #979797;">
